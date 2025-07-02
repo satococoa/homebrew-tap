@@ -5,24 +5,15 @@
 class Wtp < Formula
   desc "Worktree Plus - Enhanced worktree management with automated setup and hooks"
   homepage "https://github.com/satococoa/wtp"
-  version "0.3.0-rc5"
+  version "0.3.0-rc6"
   license "MIT"
 
   depends_on "git"
 
   on_macos do
-    if Hardware::CPU.intel?
-      url "https://github.com/satococoa/wtp/releases/download/v0.3.0-rc5/wtp_0.3.0-rc5_Darwin_x86_64.tar.gz", using: CurlDownloadStrategy
-      sha256 "8e6eec7adedd66f9bf8a81f7365dab3a7b1108f8848ae26edc625b2db7fda503"
-
-      def install
-        bin.install "wtp"
-        generate_completions_from_executable(bin/"wtp", "completion")
-      end
-    end
     if Hardware::CPU.arm?
-      url "https://github.com/satococoa/wtp/releases/download/v0.3.0-rc5/wtp_0.3.0-rc5_Darwin_arm64.tar.gz", using: CurlDownloadStrategy
-      sha256 "2ec9a01d221991fba53ca353bb4ca22dc98c029c5a926599fd583018dbec7504"
+      url "https://github.com/satococoa/wtp/releases/download/v0.3.0-rc6/wtp_0.3.0-rc6_Darwin_arm64.tar.gz", using: CurlDownloadStrategy
+      sha256 "7b007771a6ca326587b07f15fbf6b5a57a2cdc8d119c1648fbc264dcb9f878ff"
 
       def install
         bin.install "wtp"
@@ -34,8 +25,8 @@ class Wtp < Formula
   on_linux do
     if Hardware::CPU.intel?
       if Hardware::CPU.is_64_bit?
-        url "https://github.com/satococoa/wtp/releases/download/v0.3.0-rc5/wtp_0.3.0-rc5_Linux_x86_64.tar.gz", using: CurlDownloadStrategy
-        sha256 "7c18fd5cfc3a1a564d2cb81048cff4026b3a5c6c88d2a16b69ad18dafe220c41"
+        url "https://github.com/satococoa/wtp/releases/download/v0.3.0-rc6/wtp_0.3.0-rc6_Linux_x86_64.tar.gz", using: CurlDownloadStrategy
+        sha256 "b5d1b5be5b379dfdd442abc0b65195f21a33aeb5b24cc21e311f505669cb768c"
 
         def install
           bin.install "wtp"
@@ -45,8 +36,8 @@ class Wtp < Formula
     end
     if Hardware::CPU.arm?
       if Hardware::CPU.is_64_bit?
-        url "https://github.com/satococoa/wtp/releases/download/v0.3.0-rc5/wtp_0.3.0-rc5_Linux_arm64.tar.gz", using: CurlDownloadStrategy
-        sha256 "a642b3ec6d68ba1e14e5258fd3a489f45dc4b41e1337f36a6538a985a3faa455"
+        url "https://github.com/satococoa/wtp/releases/download/v0.3.0-rc6/wtp_0.3.0-rc6_Linux_arm64.tar.gz", using: CurlDownloadStrategy
+        sha256 "eed384033b4ab0a173930a199b0616de78ca20230feeb81ebb81a651c55be3f4"
 
         def install
           bin.install "wtp"
