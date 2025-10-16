@@ -5,19 +5,95 @@
 class Wtp < Formula
   desc "Worktree Plus - Enhanced worktree management with automated setup and hooks"
   homepage "https://github.com/satococoa/wtp"
-  version "1.1.1"
+  version "2.0.0"
   license "MIT"
 
   depends_on "git"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/satococoa/wtp/releases/download/v1.1.1/wtp_1.1.1_Darwin_arm64.tar.gz", using: CurlDownloadStrategy
-      sha256 "881949b5cc4b638a1c9ef44fccdff8abdb5d8d273fc613a66e176bef79695a3e"
+      url "https://github.com/satococoa/wtp/releases/download/v2.0.0/wtp_2.0.0_Darwin_arm64.tar.gz", using: CurlDownloadStrategy
+      sha256 "3cf8d2229d0756bf42b486e0a52b34fd2847d301929f07fea03226ad5c0e8de9"
 
       def install
         bin.install "wtp"
-        generate_completions_from_executable(bin/"wtp", "completion")
+
+        (bash_completion/"wtp").write <<~'EOS'
+          # wtp lazy shell-init for bash (installed via Homebrew)
+          _wtp_lazy_init() {
+            if [[ -z "${WTP_SHELL_INIT_DONE:-}" ]]; then
+              local __wtp_init __wtp_status
+              __wtp_init="$(command wtp shell-init bash 2>/dev/null)"
+              __wtp_status=$?
+              if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                __wtp_init="$(command wtp completion bash 2>/dev/null)"
+                __wtp_status=$?
+              fi
+              if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                return 124
+              fi
+
+              eval "$__wtp_init"
+              export WTP_SHELL_INIT_DONE=1
+            fi
+
+            if declare -F __wtp_bash_autocomplete >/dev/null 2>&1; then
+              __wtp_bash_autocomplete "$@"
+            elif declare -F _wtp >/dev/null 2>&1; then
+              _wtp "$@"
+            fi
+          }
+
+          complete -o bashdefault -o default -o nospace -F _wtp_lazy_init wtp
+        EOS
+
+        (zsh_completion/"_wtp").write <<~'EOS'
+          #compdef wtp
+
+          _wtp_lazy_init() {
+            if [[ -z ${WTP_SHELL_INIT_DONE-} ]]; then
+              local __wtp_init __wtp_status
+              __wtp_init="$(command wtp shell-init zsh 2>/dev/null)"
+              __wtp_status=$?
+              if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                __wtp_init="$(command wtp completion zsh 2>/dev/null)"
+                __wtp_status=$?
+              fi
+              if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                return 1
+              fi
+
+              eval "$__wtp_init"
+              export WTP_SHELL_INIT_DONE=1
+            fi
+
+            if typeset -f _wtp >/dev/null 2>&1; then
+              _wtp "$@"
+            fi
+          }
+
+          compdef _wtp_lazy_init wtp
+        EOS
+
+        (fish_completion/"wtp.fish").write <<~'EOS'
+          function __wtp_lazy_setup --on-event fish_prompt --description 'Lazy shell-init for wtp (Homebrew)'
+              functions -e __wtp_lazy_setup
+
+              if not set -q WTP_SHELL_INIT_DONE
+                  command wtp shell-init fish ^/dev/null | source
+                  set -l __wtp_status $status
+                  if test $__wtp_status -ne 0
+                      command wtp completion fish ^/dev/null | source
+                      set __wtp_status $status
+                  end
+                  if test $__wtp_status -ne 0
+                      return
+                  end
+
+                  set -gx WTP_SHELL_INIT_DONE 1
+              end
+          end
+        EOS
       end
     end
   end
@@ -25,23 +101,175 @@ class Wtp < Formula
   on_linux do
     if Hardware::CPU.intel?
       if Hardware::CPU.is_64_bit?
-        url "https://github.com/satococoa/wtp/releases/download/v1.1.1/wtp_1.1.1_Linux_x86_64.tar.gz", using: CurlDownloadStrategy
-        sha256 "93250aa9b907cb9022fb359c9837848bd47e7cf5db02f29478ec7fa801419374"
+        url "https://github.com/satococoa/wtp/releases/download/v2.0.0/wtp_2.0.0_Linux_x86_64.tar.gz", using: CurlDownloadStrategy
+        sha256 "d7d74981cc5d221cc1a8e7f6eb756b44b13ad083f77d5922467074b015887cfe"
 
         def install
           bin.install "wtp"
-          generate_completions_from_executable(bin/"wtp", "completion")
+
+          (bash_completion/"wtp").write <<~'EOS'
+            # wtp lazy shell-init for bash (installed via Homebrew)
+            _wtp_lazy_init() {
+              if [[ -z "${WTP_SHELL_INIT_DONE:-}" ]]; then
+                local __wtp_init __wtp_status
+                __wtp_init="$(command wtp shell-init bash 2>/dev/null)"
+                __wtp_status=$?
+                if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                  __wtp_init="$(command wtp completion bash 2>/dev/null)"
+                  __wtp_status=$?
+                fi
+                if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                  return 124
+                fi
+
+                eval "$__wtp_init"
+                export WTP_SHELL_INIT_DONE=1
+              fi
+
+              if declare -F __wtp_bash_autocomplete >/dev/null 2>&1; then
+                __wtp_bash_autocomplete "$@"
+              elif declare -F _wtp >/dev/null 2>&1; then
+                _wtp "$@"
+              fi
+            }
+
+            complete -o bashdefault -o default -o nospace -F _wtp_lazy_init wtp
+          EOS
+
+          (zsh_completion/"_wtp").write <<~'EOS'
+            #compdef wtp
+
+            _wtp_lazy_init() {
+              if [[ -z ${WTP_SHELL_INIT_DONE-} ]]; then
+                local __wtp_init __wtp_status
+                __wtp_init="$(command wtp shell-init zsh 2>/dev/null)"
+                __wtp_status=$?
+                if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                  __wtp_init="$(command wtp completion zsh 2>/dev/null)"
+                  __wtp_status=$?
+                fi
+                if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                  return 1
+                fi
+
+                eval "$__wtp_init"
+                export WTP_SHELL_INIT_DONE=1
+              fi
+
+              if typeset -f _wtp >/dev/null 2>&1; then
+                _wtp "$@"
+              fi
+            }
+
+            compdef _wtp_lazy_init wtp
+          EOS
+
+          (fish_completion/"wtp.fish").write <<~'EOS'
+            function __wtp_lazy_setup --on-event fish_prompt --description 'Lazy shell-init for wtp (Homebrew)'
+                functions -e __wtp_lazy_setup
+
+                if not set -q WTP_SHELL_INIT_DONE
+                    command wtp shell-init fish ^/dev/null | source
+                    set -l __wtp_status $status
+                    if test $__wtp_status -ne 0
+                        command wtp completion fish ^/dev/null | source
+                        set __wtp_status $status
+                    end
+                    if test $__wtp_status -ne 0
+                        return
+                    end
+
+                    set -gx WTP_SHELL_INIT_DONE 1
+                end
+            end
+          EOS
         end
       end
     end
     if Hardware::CPU.arm?
       if Hardware::CPU.is_64_bit?
-        url "https://github.com/satococoa/wtp/releases/download/v1.1.1/wtp_1.1.1_Linux_arm64.tar.gz", using: CurlDownloadStrategy
-        sha256 "a63bc3871af1ccd8d1fbf58ff59209da493f767c2a53f54dea50d8e07176853b"
+        url "https://github.com/satococoa/wtp/releases/download/v2.0.0/wtp_2.0.0_Linux_arm64.tar.gz", using: CurlDownloadStrategy
+        sha256 "04135a9fcc6b8cde4f0cec7ac9d1dd50be2f5de7f6b67ea9231c16b2a6e4fab1"
 
         def install
           bin.install "wtp"
-          generate_completions_from_executable(bin/"wtp", "completion")
+
+          (bash_completion/"wtp").write <<~'EOS'
+            # wtp lazy shell-init for bash (installed via Homebrew)
+            _wtp_lazy_init() {
+              if [[ -z "${WTP_SHELL_INIT_DONE:-}" ]]; then
+                local __wtp_init __wtp_status
+                __wtp_init="$(command wtp shell-init bash 2>/dev/null)"
+                __wtp_status=$?
+                if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                  __wtp_init="$(command wtp completion bash 2>/dev/null)"
+                  __wtp_status=$?
+                fi
+                if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                  return 124
+                fi
+
+                eval "$__wtp_init"
+                export WTP_SHELL_INIT_DONE=1
+              fi
+
+              if declare -F __wtp_bash_autocomplete >/dev/null 2>&1; then
+                __wtp_bash_autocomplete "$@"
+              elif declare -F _wtp >/dev/null 2>&1; then
+                _wtp "$@"
+              fi
+            }
+
+            complete -o bashdefault -o default -o nospace -F _wtp_lazy_init wtp
+          EOS
+
+          (zsh_completion/"_wtp").write <<~'EOS'
+            #compdef wtp
+
+            _wtp_lazy_init() {
+              if [[ -z ${WTP_SHELL_INIT_DONE-} ]]; then
+                local __wtp_init __wtp_status
+                __wtp_init="$(command wtp shell-init zsh 2>/dev/null)"
+                __wtp_status=$?
+                if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                  __wtp_init="$(command wtp completion zsh 2>/dev/null)"
+                  __wtp_status=$?
+                fi
+                if [[ $__wtp_status -ne 0 || -z "$__wtp_init" ]]; then
+                  return 1
+                fi
+
+                eval "$__wtp_init"
+                export WTP_SHELL_INIT_DONE=1
+              fi
+
+              if typeset -f _wtp >/dev/null 2>&1; then
+                _wtp "$@"
+              fi
+            }
+
+            compdef _wtp_lazy_init wtp
+          EOS
+
+          (fish_completion/"wtp.fish").write <<~'EOS'
+            function __wtp_lazy_setup --on-event fish_prompt --description 'Lazy shell-init for wtp (Homebrew)'
+                functions -e __wtp_lazy_setup
+
+                if not set -q WTP_SHELL_INIT_DONE
+                    command wtp shell-init fish ^/dev/null | source
+                    set -l __wtp_status $status
+                    if test $__wtp_status -ne 0
+                        command wtp completion fish ^/dev/null | source
+                        set __wtp_status $status
+                    end
+                    if test $__wtp_status -ne 0
+                        return
+                    end
+
+                    set -gx WTP_SHELL_INIT_DONE 1
+                end
+            end
+          EOS
         end
       end
     end
