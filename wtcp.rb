@@ -1,9 +1,9 @@
 class Wtcp < Formula
   desc "Copy files/dirs from the main git worktree into the current worktree"
   homepage "https://github.com/satococoa/wtcp"
-  url "https://github.com/satococoa/wtcp/archive/ea03b65de4bb61b85f8ec4c775ae69bcd99bc6af.tar.gz"
-  version "0.1.0"
-  sha256 "db14ac573318dcf8ced6fb3ea5ddd99cbd8d83e88ba38ef87a95b8824942474e"
+  url "https://github.com/satococoa/wtcp/archive/refs/tags/v0.1.1.tar.gz"
+  version "0.1.1"
+  sha256 "65fd88833d5812da7c1117fe50e11c7333980125086079a38d91c8484c623004"
   license "MIT"
 
   depends_on "rsync"
