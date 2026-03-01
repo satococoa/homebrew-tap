@@ -5,9 +5,9 @@
 class GitWorktreeinclude < Formula
   desc "Safely apply ignored files listed in .worktreeinclude between Git worktrees"
   homepage "https://github.com/satococoa/git-worktreeinclude"
-  url "https://github.com/satococoa/git-worktreeinclude/archive/db3d596367482bb19a2db469eb9913c7d2841a5d.tar.gz"
-  version "0.0.0"
-  sha256 "f89dc85277554a23fe6ae849c61a929205ffa9ad33ec4bde4cf8a8402289abd2"
+  url "https://github.com/satococoa/git-worktreeinclude/archive/refs/tags/v0.1.0.tar.gz"
+  version "0.1.0"
+  sha256 "182f1f1ad3f337aac60e2029a21f38c7c6169ca4af7ae5c441489098e63d6e0d"
   license "MIT"
 
   depends_on "go" => :build
