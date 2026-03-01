@@ -10,7 +10,9 @@ brew tap satococoa/tap
 
 ## Available Formulas
 
-(Add your formulas here as you create them)
+- `wtp`
+- `wtcp`
+- `git-worktreeinclude`
 
 ## Usage
 
