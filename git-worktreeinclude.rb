@@ -19,14 +19,15 @@ class GitWorktreeinclude < Formula
   end
 
   test do
-    output = shell_output("#{bin}/git-worktreeinclude --help")
+    output = shell_output("#{bin}/git-worktreeinclude --help", 2)
     assert_match "git-worktreeinclude", output
 
+    completions = {}
     %w[bash zsh fish].each do |shell|
-      completion = shell_output("#{bin}/git-worktreeinclude completion #{shell}")
-      refute_empty completion.strip
+      completions[shell] = shell_output("#{bin}/git-worktreeinclude completion #{shell}")
+      refute_empty completions[shell].strip
     end
 
-    assert_match "#compdef git-worktreeinclude", shell_output("#{bin}/git-worktreeinclude completion zsh")
+    assert_match "#compdef git-worktreeinclude", completions["zsh"]
   end
 end
