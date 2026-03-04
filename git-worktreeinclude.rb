@@ -19,7 +19,7 @@ class GitWorktreeinclude < Formula
   end
 
   test do
-    output = shell_output("#{bin}/git-worktreeinclude --help", 2)
+    output = shell_output("#{bin}/git-worktreeinclude --help")
     assert_match "git-worktreeinclude", output
 
     completions = {}
