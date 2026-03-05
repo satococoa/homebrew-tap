@@ -15,10 +15,19 @@ class GitWorktreeinclude < Formula
 
   def install
     system "go", "build", *std_go_args(output: bin/"git-worktreeinclude"), "./cmd/git-worktreeinclude"
+    generate_completions_from_executable(bin/"git-worktreeinclude", "completion", shells: [:bash, :zsh, :fish])
   end
 
   test do
-    output = shell_output("#{bin}/git-worktreeinclude --help", 2)
-    assert_match "Usage: git-worktreeinclude", output
+    output = shell_output("#{bin}/git-worktreeinclude --help")
+    assert_match "git-worktreeinclude", output
+
+    completions = {}
+    %w[bash zsh fish].each do |shell|
+      completions[shell] = shell_output("#{bin}/git-worktreeinclude completion #{shell}")
+      refute_empty completions[shell].strip
+    end
+
+    assert_match "#compdef git-worktreeinclude", completions["zsh"]
   end
 end
