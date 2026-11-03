@@ -1,9 +1,9 @@
 class Wtp < Formula
   desc "Worktree Plus - Enhanced worktree management with automated setup and hooks"
   homepage "https://github.com/satococoa/wtp"
-  url "https://github.com/satococoa/wtp/archive/refs/tags/v2.10.5.tar.gz"
-  version "2.10.5"
-  sha256 "9410b808fe83f9aebe820c4dc4ff4930827af50697a80429c1ff33f92723e241"
+  url "https://github.com/satococoa/wtp/archive/refs/tags/v2.10.6.tar.gz"
+  version "2.10.6"
+  sha256 "dcad1a36db24ebc7abaabce87ed7143fa1b1d544ba5ad2fe7c5424b4263a1dc5"
   license "MIT"
 
   depends_on "go" => :build
